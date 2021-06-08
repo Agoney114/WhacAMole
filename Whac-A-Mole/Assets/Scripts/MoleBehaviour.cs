@@ -11,8 +11,6 @@ public class MoleBehaviour : MonoBehaviour
     public float initTimeMax = 3.5f;
     private bool moleIsRunning = true;
 
-
-    // Start is called before the first frame update
     void Awake()
     {
         originalPosition = transform.position;

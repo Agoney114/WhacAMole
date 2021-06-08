@@ -7,14 +7,13 @@ using TMPro;
 public class GameController : MonoBehaviour
 {  
 
-    //Este commit es los mismo que el de el ejercico 2 pero se me olvidó mandar el 2 antes
-
-
-
     public static GameController instance;
     public GameObject mainMenu, inGameUI,endScreen,recordPanel;
+    public GameObject[] powerUp1;
+    public GameObject[] powerUp2;
 
     public Transform molesParent;
+    public Transform pos;
     private MoleBehaviour[] moles;
 
     public bool playing = false;
@@ -28,9 +27,10 @@ public class GameController : MonoBehaviour
     public float failedClicks = 0;
     int recordScore = 0;
 
-    public TMP_InputField nameField;
-    string playerName;
+
     string highScoreKey = "HighScore";
+
+    Vector3 posicionInical;
 
     public TextMeshProUGUI timeText, recordText, pointsText, infoPointsText, inforRecordText, infoSuccesClicks, infoFailedClicks;
 
@@ -44,13 +44,15 @@ public class GameController : MonoBehaviour
         {
             Destroy(this);
         }
-       recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
+        recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
+
     }
 
     void ConfigureInstance()
     {
         //Configura acceso a moles
         moles = new MoleBehaviour[molesParent.childCount];
+
         for (int i = 0; i < molesParent.childCount; i++)
         {
             moles[i] = molesParent.GetChild(i).GetComponent<MoleBehaviour>();
@@ -71,12 +73,13 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //se muestra los puntos y el record
         recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
         pointsText.text = "puntos: " + points;
         if (playing == true)
         {
-            timePlayed -= Time.deltaTime;
-            timeText.text = "Tiempo: " + Mathf.Floor(timePlayed) + "/60";
+            timePlayed -= Time.deltaTime;     
+            timeText.text = "Tiempo: " + Mathf.Floor(timePlayed);
             if (timePlayed <= gameDuration)
             {
 
@@ -93,6 +96,7 @@ public class GameController : MonoBehaviour
             {
                 CheckClicks();
             }
+            //se llama a la funcion que almacena el record en el update para que este actualizado siempre
             SaveRecord();
         }
     }
@@ -116,12 +120,6 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void Retry()
     {
-        //Guardar record si es necesario
-
-        //Acceso al texto escrito
-        playerName = nameField.text;
-        Debug.Log("Record de " + playerName);
-
         //Reinicia información del juego
         ResetGame();
         //Cambia las pantallas
@@ -173,6 +171,7 @@ public class GameController : MonoBehaviour
     {
         if ((Input.touchCount >= 1 && Input.GetTouch(0).phase == TouchPhase.Ended) || (Input.GetMouseButtonUp(0)))
         {
+            //recuento de todos los clicks de la partida
             clicks += 1;
             Vector3 pos = Input.mousePosition;
             if (Application.platform == RuntimePlatform.Android)
@@ -190,12 +189,14 @@ public class GameController : MonoBehaviour
                     if (mole != null)
                     {
                         mole.OnHitMole();
+                        //recuento de los puntos y de los clicks dados con exito
                         points += 100;
                         successClicks += 1;
                     }
                 }
                 if (hitInfo.collider.tag.Equals("Tag"))
                 {
+                    //recuento de los cliks fallados
                     failedClicks += 1;
                 }
             }
@@ -217,6 +218,9 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// Funcion para entrar en pausa, pone playing en false y muestra la pantalla de pausa.
     /// </summary>
+    
+
+    //sistema de guardado de record con playerprefs
     public void SaveRecord()
     {
         if (points > PlayerPrefs.GetInt(highScoreKey, 0))
@@ -226,4 +230,28 @@ public class GameController : MonoBehaviour
             recordText.text = recordScore.ToString();
         }
     }
+    //comienzo de los power ups
+    public void PowerUp1()
+    {
+        if (playing == true)
+        {
+            Vector3 newPos = posicionInical;
+            
+            int n = Random.Range(0, powerUp2.Length);    
+            LeanTween.move(Instantiate(powerUp2[n], pos.position, powerUp2[n].transform.rotation), newPos, 3.5f);
+           
+        }
+    }
+    public void PowerUp2()
+    {
+        if (playing == true)
+        {
+            Vector3 newPos = posicionInical;
+
+            int i = Random.Range(0, powerUp1.Length);
+            LeanTween.move(Instantiate(powerUp1[i], pos.position, powerUp1[i].transform.rotation), newPos, 3.5f);
+
+        }
+    }
+
 }
