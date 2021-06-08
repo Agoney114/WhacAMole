@@ -139,7 +139,7 @@ public class GameController : MonoBehaviour
             moles[i].StopMole();
         }
 
-        timePlayed = 0.0f;
+        timePlayed = 60;
         points = 0;
         clicks = 0;
         failedClicks = 0;
@@ -205,7 +205,7 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void SaveRecord()
     {
-        if (points > PlayerPrefs.GetInt(highScoreKey, recordScore))
+        if (points > PlayerPrefs.GetInt(highScoreKey, 0))
         {
             PlayerPrefs.SetInt(highScoreKey, points);
             PlayerPrefs.Save();
