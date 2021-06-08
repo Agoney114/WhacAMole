@@ -5,7 +5,14 @@ using UnityEngine;
 using TMPro;
 
 public class GameController : MonoBehaviour
-{
+{  
+    
+
+    // Este commit es lo mismo del ejercicio 3 pero no me habia dado cuenta que ya tenia hecho el ejercicio 1 a
+
+
+
+
     public static GameController instance;
     public GameObject mainMenu, inGameUI,endScreen,recordPanel;
 
@@ -92,7 +99,7 @@ public class GameController : MonoBehaviour
     void ShowEndScreen()
     {
         endScreen.SetActive(true);
-        infoGame.text = " Total points : " + "000" + "\n Record: " + "100" + "\n 10" + "% good shots \n" + "999" + " bad shots";
+        infoGame.text = " Total points : " + "000" + "\n Record: " + "100" + "\n 10" + "% good shots \n" + failedClicks + " bad shots";
 
         bool isRecord = false;
         //si hay nuevo record mostrar el panel recordPanel
