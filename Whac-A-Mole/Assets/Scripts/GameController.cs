@@ -6,6 +6,11 @@ using TMPro;
 
 public class GameController : MonoBehaviour
 {  
+
+    //Este commit es los mismo que el de el ejercico 2 pero se me olvidó mandar el 2 antes
+
+
+
     public static GameController instance;
     public GameObject mainMenu, inGameUI,endScreen,recordPanel;
 
