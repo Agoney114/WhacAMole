@@ -3042,7 +3042,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &985877181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3140,7 +3140,7 @@ GameObject:
   - component: {fileID: 1002158869}
   - component: {fileID: 1002158868}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: RecordText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5035,12 +5035,12 @@ MonoBehaviour:
   recordPanel: {fileID: 709541577}
   molesParent: {fileID: 757977606}
   playing: 0
-  gameDuration: 60
-  timePlayed: 0
+  gameDuration: 0
+  timePlayed: 60
   nameField: {fileID: 1006123068}
   infoGame: {fileID: 382080007}
   timeText: {fileID: 1443068525}
-  recordText: {fileID: 0}
+  recordText: {fileID: 1002158868}
   pointsText: {fileID: 288963627}
 --- !u!4 &1624335101
 Transform:

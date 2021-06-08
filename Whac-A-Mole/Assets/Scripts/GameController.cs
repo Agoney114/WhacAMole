@@ -6,13 +6,6 @@ using TMPro;
 
 public class GameController : MonoBehaviour
 {  
-    
-
-    // Este commit es lo mismo del ejercicio 3 pero no me habia dado cuenta que ya tenia hecho el ejercicio 1 a
-
-
-
-
     public static GameController instance;
     public GameObject mainMenu, inGameUI,endScreen,recordPanel;
 
@@ -21,15 +14,17 @@ public class GameController : MonoBehaviour
 
     public bool playing = false;
 
-    public float gameDuration = 60f;
-    public float timePlayed;
+    public float gameDuration = 0f;
+    public float timePlayed = 60;
 
     int points = 0;
     int clicks = 0;
     int failedClicks = 0;
+    int recordScore = 0;
 
     public TMP_InputField nameField;
     string playerName;
+    string highScoreKey = "HighScore";
 
     public TextMeshProUGUI infoGame, timeText, recordText, pointsText;
 
@@ -43,7 +38,7 @@ public class GameController : MonoBehaviour
         {
             Destroy(this);
         }
-
+       recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
     }
 
     void ConfigureInstance()
@@ -70,12 +65,13 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
         pointsText.text = ("puntos: " + points);
         if (playing == true)
         {
-            timePlayed += Time.deltaTime;
+            timePlayed -= Time.deltaTime;
             timeText.text = "Tiempo: " + Mathf.Floor(timePlayed) + "/60";
-            if (timePlayed >= gameDuration)
+            if (timePlayed <= gameDuration)
             {
 
                 ShowEndScreen();
@@ -99,7 +95,7 @@ public class GameController : MonoBehaviour
     void ShowEndScreen()
     {
         endScreen.SetActive(true);
-        infoGame.text = " Total points : " + "000" + "\n Record: " + "100" + "\n 10" + "% good shots \n" + failedClicks + " bad shots";
+        infoGame.text = " Total points : " + "000" + "\n Record: " + recordScore + "\n 10" + "% good shots \n" + failedClicks + " bad shots";
 
         bool isRecord = false;
         //si hay nuevo record mostrar el panel recordPanel
@@ -207,9 +203,13 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// Funcion para entrar en pausa, pone playing en false y muestra la pantalla de pausa.
     /// </summary>
-    public void EnterOnPause()
-    { 
-    
-    
+    public void SaveRecord()
+    {
+        if (points > PlayerPrefs.GetInt(highScoreKey, recordScore))
+        {
+            PlayerPrefs.SetInt(highScoreKey, points);
+            PlayerPrefs.Save();
+            recordText.text = recordScore.ToString();
+        }
     }
 }
