@@ -18,15 +18,16 @@ public class GameController : MonoBehaviour
     public float timePlayed = 60;
 
     int points = 0;
-    int clicks = 0;
-    int failedClicks = 0;
+    public float clicks = 0;
+    public float successClicks = 0;
+    public float failedClicks = 0;
     int recordScore = 0;
 
     public TMP_InputField nameField;
     string playerName;
     string highScoreKey = "HighScore";
 
-    public TextMeshProUGUI infoGame, timeText, recordText, pointsText;
+    public TextMeshProUGUI timeText, recordText, pointsText, infoPointsText, inforRecordText, infoSuccesClicks, infoFailedClicks;
 
     void Awake()
     {
@@ -66,7 +67,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
-        pointsText.text = ("puntos: " + points);
+        pointsText.text = "puntos: " + points;
         if (playing == true)
         {
             timePlayed -= Time.deltaTime;
@@ -87,7 +88,7 @@ public class GameController : MonoBehaviour
             {
                 CheckClicks();
             }
-            
+            SaveRecord();
         }
     }
 
@@ -95,7 +96,10 @@ public class GameController : MonoBehaviour
     void ShowEndScreen()
     {
         endScreen.SetActive(true);
-        infoGame.text = " Total points : " + "000" + "\n Record: " + recordScore + "\n 10" + "% good shots \n" + failedClicks + " bad shots";
+        infoPointsText.text = pointsText.text;
+        inforRecordText.text = "record : " + recordText.text;
+        infoSuccesClicks.text = "% punteria : " + ((successClicks / clicks) * 100) + " %";
+        infoFailedClicks.text = "fallos : " + failedClicks;
 
         bool isRecord = false;
         //si hay nuevo record mostrar el panel recordPanel
@@ -164,7 +168,7 @@ public class GameController : MonoBehaviour
     {
         if ((Input.touchCount >= 1 && Input.GetTouch(0).phase == TouchPhase.Ended) || (Input.GetMouseButtonUp(0)))
         {
-          
+            clicks += 1;
             Vector3 pos = Input.mousePosition;
             if (Application.platform == RuntimePlatform.Android)
             {
@@ -181,8 +185,13 @@ public class GameController : MonoBehaviour
                     if (mole != null)
                     {
                         mole.OnHitMole();
-                        points += 100;  
+                        points += 100;
+                        successClicks += 1;
                     }
+                }
+                if (hitInfo.collider.tag.Equals("Tag"))
+                {
+                    failedClicks += 1;
                 }
             }
         }
