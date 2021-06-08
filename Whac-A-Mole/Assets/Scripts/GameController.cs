@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
     public TMP_InputField nameField;
     string playerName;
 
-    public TextMeshProUGUI infoGame;
+    public TextMeshProUGUI infoGame, timeText, recordText, pointsText;
 
     void Awake()
     {
@@ -63,10 +63,11 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        pointsText.text = ("puntos: " + points);
         if (playing == true)
         {
             timePlayed += Time.deltaTime;
-
+            timeText.text = "Tiempo: " + Mathf.Floor(timePlayed) + "/60";
             if (timePlayed >= gameDuration)
             {
 
@@ -177,6 +178,7 @@ public class GameController : MonoBehaviour
                     if (mole != null)
                     {
                         mole.OnHitMole();
+                        points += 100;  
                     }
                 }
             }
